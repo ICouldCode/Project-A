@@ -1,32 +1,90 @@
-# Prerequisites
-*.d
+# =========================
+# Build folders
+# =========================
+build/
+bin/
+out/
+Debug/
+Release/
+x64/
+x86/
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
+# CMake
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+Makefile
+
+# =========================
+# Visual Studio
+# =========================
+.vs/
+*.VC.db
+*.VC.opendb
+*.VC.db-shm
+*.VC.db-wal
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Intermediate files
 *.obj
-
-# Precompiled Headers
-*.gch
+*.o
 *.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+*.pdb
+*.idb
+*.ilk
+*.ipch
+*.tlog
+*.log
+*.lastbuildstate
 
 # Executables
 *.exe
+*.dll
+*.lib
+*.exp
+
+# =========================
+# MinGW / GCC
+# =========================
+*.a
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# Linux
+# =========================
 *.out
-*.app
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.bak
+*.swp
+*.cache
+
+# =========================
+# VSCode
+# =========================
+.vscode/
+
+# Uncomment if you don't want to share launch settings
+# .vscode/
+
+# =========================
+# CLion / JetBrains
+# =========================
+.idea/
+
+# =========================
+# Raylib generated assets (optional)
+# =========================
+# screenshots/
+# exports/
