@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include "raylib.h"
 #include "component.h"
 
@@ -10,7 +9,6 @@ public:
     virtual ~ColliderComponent() = default;
 
     Vector2 offset = { 0, 0 };
-    Vector2 size = { 32, 32 };
 
     bool isSolid = true;
     bool isTrigger = false;
@@ -23,8 +21,9 @@ public:
     Rectangle GetBounds() const;
 	Rectangle GetBoundsAt(Vector2 pos) const;
 
-    void OnCollisionStay(ColliderComponent* other)
-    {
-        std::cout << "Collision Enter with another collider!" << std::endl;
-    }
+    void OnCollisionStay(ColliderComponent* other) override;
+
+    void OnCollisionEnter(ColliderComponent* other) override;
+
+	void OnCollisionExit() override;
 };

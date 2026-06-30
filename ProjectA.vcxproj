@@ -143,22 +143,21 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="collider_component.cpp" />
-    <ClCompile Include="enemy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="physics_system.cpp" />
-    <ClCompile Include="player.cpp" />
-    <ClCompile Include="wall.cpp" />
+    <ClCompile Include="player_move.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="collider_component.h" />
-    <ClInclude Include="enemy.h" />
     <ClInclude Include="gameobject.h" />
     <ClInclude Include="physics_system.h" />
-    <ClInclude Include="player.h" />
-    <ClInclude Include="wall.h" />
+    <ClInclude Include="player_move.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="component.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="images.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
