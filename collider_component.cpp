@@ -1,5 +1,5 @@
 #include "collider_component.h"
-#include "GameObject.h" 
+#include "gameobject.h"
 
 
 Rectangle ColliderComponent::GetBounds() const

@@ -11,6 +11,17 @@ endif()
 
 find_package(raylib REQUIRED)
 
-add_executable(MyRaylibGame main.cpp)
+add_executable(MyRaylibGame
+    main.cpp
+    collider_component.cpp
+    physics_system.cpp
+    player_move.cpp
+)
 
 target_link_libraries(MyRaylibGame PRIVATE raylib)
+
+add_custom_command(TARGET MyRaylibGame POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            ${CMAKE_CURRENT_SOURCE_DIR}/images.png
+            $<TARGET_FILE_DIR:MyRaylibGame>/images.png
+)

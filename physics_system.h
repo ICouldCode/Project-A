@@ -40,6 +40,8 @@ public:
 				return state;
 			}
 		}
+
+		return false;
 	}
 
 	void Update();
