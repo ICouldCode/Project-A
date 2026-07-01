@@ -15,8 +15,9 @@ void player_move::Update(float deltaTime)
     owner->nextPosition = owner->position;
     owner->nextPosition.x += moveDirection.x * owner->speed * deltaTime;
     owner->nextPosition.y += moveDirection.y * owner->speed * deltaTime;
+}
 
-    
+void player_move::Draw(float deltaTime) {
 }
 
 void player_move::OnCollisionEnter(ColliderComponent* other)
@@ -28,6 +29,24 @@ void player_move::OnCollisionStay(ColliderComponent* other)
 }
 
 void player_move::OnCollisionExit()
+{
+}
+
+void player_move::OnTriggerEnter(ColliderComponent* other)
+{
+}
+
+void player_move::OnTriggerStay(ColliderComponent* other)
+{
+    if(owner->GetCollider(ColliderType::Interaction) && other->type == ColliderType::Interaction){
+        if(owner != other->owner){
+            if(owner->GetCollider(ColliderType::Interaction) != other->owner->GetCollider(ColliderType::Interaction)){
+                std::cout << "Interaction Hit" + other->owner->name << std::endl;
+            }
+        }
+    }
+}
+void player_move::OnTriggerExit()
 {
 }
 

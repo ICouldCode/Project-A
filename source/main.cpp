@@ -29,34 +29,40 @@ int main(void) {
 	player.layer = 1;
 	player.width = 128.0f;
 	player.height = 128.0f;
+	player.name = "Player";
+	ColliderComponent* interactCollider = new ColliderComponent();
+	interactCollider->isSolid = false;
+	interactCollider->isTrigger = true;
+	interactCollider->offset = {-player.width / 2, -player.height / 2};
+	interactCollider->type = ColliderType::Interaction;
+	
+	interactCollider->scale = {2.0f, 2.0f};
+	player.AddComponent(interactCollider);
+	physicsSystem.addCollider(interactCollider);
 	
 	GameObject npc;
 	npc.color = GREEN;
-	ColliderComponent* enemyCollider = new ColliderComponent();
-	npc.AddComponent(enemyCollider);	
-	enemyCollider->isSolid = true;
 	npc.position = { 200, 200 };
-	physicsSystem.addCollider(enemyCollider);
-	npc.tag = Tag::Interact;
-	npc.name = "NPC";
-	npc.layer = 1;
 	npc.width = 128.0f;
 	npc.height = 128.0f;
-	
-	GameObject floor;
-	ColliderComponent* wallCollider = new ColliderComponent();
-	wallCollider->isSolid = false;
-	floor.AddComponent(wallCollider);
-	physicsSystem.addCollider(wallCollider);
-	floor.texture = LoadTexture("images.png");
-	floor.width = 1600.0f;
-	floor.height = 1600.0f;
-	floor.position = { 0 - (floor.width / 2),0 - (floor.height / 2) };
+	ColliderComponent* npcCollider = new ColliderComponent();
+	npc.AddComponent(npcCollider);	
+	ColliderComponent* npc_interactCollider = new ColliderComponent();
+	npc_interactCollider->scale = {2.0f, 2.0f};
+	npc_interactCollider->isSolid = false;
+	npc_interactCollider->isTrigger = true;
+	npc_interactCollider->offset = {-npc.width / 2, -npc.height / 2};
+	npc_interactCollider->type = ColliderType::Interaction;
+	npcCollider->isSolid = true;
+	npc.AddComponent(npc_interactCollider);
+	physicsSystem.addCollider(npcCollider);
+	physicsSystem.addCollider(npc_interactCollider);
+	npc.tag = Tag::NPC;
+	npc.name = "NPC";
+	npc.layer = 1;
 
 	gameObjects.push_back(&player);
 	gameObjects.push_back(&npc);
-	gameObjects.push_back(&floor);
-
 
 	std::sort(gameObjects.begin(), gameObjects.end(), [](GameObject* a, GameObject* b) {
 		return a->layer < b->layer;
@@ -90,7 +96,7 @@ int main(void) {
 		}
 		physicsSystem.Update();
 		//camera.target = player.position;
-		
+		 
 		//Draw
 		BeginDrawing();
 		ClearBackground(BLACK);
@@ -98,6 +104,10 @@ int main(void) {
 		for (GameObject* object : gameObjects)
 		{
 			object->Draw(deltaTime);
+		}
+
+		for (GameObject* obj : gameObjects){
+			obj->DrawComponents(deltaTime);
 		}
 
 		EndMode2D();

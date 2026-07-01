@@ -12,8 +12,14 @@ void PhysicsSystem::Update()
         c->isCollidingDown = false;
     }
 
+    //Solid collisions
     for (ColliderComponent* colliderA : colliders)
     {
+        if (!colliderA->isSolid || colliderA->isTrigger)
+        {
+            continue;
+        }
+
         Vector2 testX = colliderA->owner->position;
         testX.x = colliderA->owner->nextPosition.x;
 
@@ -21,7 +27,9 @@ void PhysicsSystem::Update()
         for (ColliderComponent* colliderB : colliders)
         {
             if (colliderB == colliderA) continue;
+            if (colliderB->owner == colliderA->owner) continue;
             if (!colliderB->isSolid) continue;
+            if (colliderB->isTrigger) continue;
 
             if (CheckCollisionRecs(colliderA->GetBoundsAt(testX), colliderB->GetBounds()))
             {
@@ -37,7 +45,9 @@ void PhysicsSystem::Update()
         for (ColliderComponent* colliderB : colliders)
         {
             if (colliderB == colliderA) continue;
+            if (colliderB->owner == colliderA->owner) continue;
             if (!colliderB->isSolid) continue;
+            if (colliderB->isTrigger) continue;
 
             if (CheckCollisionRecs(colliderA->GetBoundsAt(testY), colliderB->GetBounds()))
             {
@@ -55,7 +65,9 @@ void PhysicsSystem::Update()
 				for (ColliderComponent* colliderB : colliders)
 				{
 					if (colliderB == colliderA) continue;
+                    if (colliderB->owner == colliderA->owner) continue;
 					if (!colliderB->isSolid) continue;
+                    if (colliderB->isTrigger) continue;
 					if (CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds()))
 					{
 						colliderA->OnCollisionEnter(colliderB);
@@ -67,7 +79,9 @@ void PhysicsSystem::Update()
                 for (ColliderComponent* colliderB : colliders)
                 {
                     if (colliderB == colliderA) continue;
+                    if (colliderB->owner == colliderA->owner) continue;
                     if (!colliderB->isSolid) continue;
+                    if (colliderB->isTrigger) continue;
                     if (CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds()))
                     {
                         colliderA->OnCollisionStay(colliderB);
@@ -82,4 +96,25 @@ void PhysicsSystem::Update()
         }
         colliderA->owner->nextPosition = colliderA->owner->position;
     }
+
+
+    //Triggers
+
+    for (ColliderComponent* colliderA: colliders){
+        if(colliderA->isSolid || !colliderA->isTrigger){
+            continue;
+        }
+
+        for(ColliderComponent* colliderB : colliders){
+            if(colliderA == colliderB) continue;
+            if(colliderA->owner == colliderB->owner) continue;
+            if(colliderB->isSolid) continue;
+            if(!colliderB->isTrigger) continue;
+
+            if(CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds())){
+                colliderA->OnTriggerStay(colliderB);
+                colliderB->OnTriggerStay(colliderA);
+            }
+        }
+    }   
 }

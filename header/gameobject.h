@@ -1,13 +1,13 @@
 #pragma once
 #include "raylib.h"
-#include "component.h"
+#include "collider_component.h"
 #include <vector>
 #include <tuple>
 #include <string>
 
 enum class Tag
 {
-	Interact,
+	NPC,
     None
 };
 
@@ -41,19 +41,52 @@ public:
 
         return nullptr;
     }
+    template<typename T>
+    std::vector<T*> GetComponents()
+    {
+        std::vector<T*> results;
 
-    void Update(float dt)
+        for (Component* component : components)
+        {
+            if (T* result = dynamic_cast<T*>(component))
+            {
+                results.push_back(result);
+            }
+        }
+
+        return results;
+    }
+
+    ColliderComponent* GetCollider(ColliderType type)
+    {
+        for (ColliderComponent* collider : GetComponents<ColliderComponent>())
+        {
+            if (collider->type == type)
+            {
+                return collider;
+            }
+        }
+
+        return nullptr;
+    }
+
+    void Update(float deltaTime)
     {
         nextPosition = position;
 
         for (auto& c : components)
-            c->Update(dt);
+            c->Update(deltaTime);
 
-        OnUpdate(dt);
+        OnUpdate(deltaTime);
+    }
+
+    void DrawComponents(float deltaTime){
+        for (auto& c : components)
+            c->Draw(deltaTime);
     }
 
     virtual void OnUpdate(float deltaTime) {};
-    virtual void Draw(float deltaTime) const 
+    virtual void Draw(float deltaTime) 
     {
         if (texture.id > 0)
             DrawTexturePro(

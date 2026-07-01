@@ -12,10 +12,14 @@ endif()
 find_package(raylib REQUIRED)
 
 add_executable(MyRaylibGame
-    main.cpp
-    collider_component.cpp
-    physics_system.cpp
-    player_move.cpp
+    source/main.cpp
+    source/collider_component.cpp
+    source/physics_system.cpp
+    source/player_move.cpp
+)
+
+target_include_directories(MyRaylibGame PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/header
 )
 
 target_link_libraries(MyRaylibGame PRIVATE raylib)
