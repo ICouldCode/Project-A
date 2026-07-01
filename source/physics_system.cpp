@@ -34,6 +34,14 @@ void PhysicsSystem::Update()
             if (CheckCollisionRecs(colliderA->GetBoundsAt(testX), colliderB->GetBounds()))
             {
                 blockedX = true;
+                
+                float attemptedMoveX = colliderA->owner->nextPosition.x - colliderA->owner->position.x;
+
+                if (attemptedMoveX > 0)
+                    colliderA->isCollidingRight= true;
+                else if (attemptedMoveX < 0)
+                    colliderA->isCollidingLeft = true;
+
                 break;
             }
         }
@@ -52,6 +60,13 @@ void PhysicsSystem::Update()
             if (CheckCollisionRecs(colliderA->GetBoundsAt(testY), colliderB->GetBounds()))
             {
                 blockedY = true;
+                float attemptedMoveY = colliderA->owner->nextPosition.y - colliderA->owner->position.y;
+
+                if (attemptedMoveY > 0)
+                    colliderA->isCollidingDown = true;
+                else if (attemptedMoveY < 0)
+                    colliderA->isCollidingUp = true;
+
                 break;
             }
         }
@@ -71,7 +86,7 @@ void PhysicsSystem::Update()
 					if (CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds()))
 					{
 						colliderA->OnCollisionEnter(colliderB);
-						colliderB->OnCollisionEnter(colliderA);
+						//colliderB->OnCollisionEnter(colliderA);
 					}
 				}
             }
@@ -85,7 +100,7 @@ void PhysicsSystem::Update()
                     if (CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds()))
                     {
                         colliderA->OnCollisionStay(colliderB);
-                        colliderB->OnCollisionStay(colliderA);
+                        //colliderB->OnCollisionStay(colliderA);
                     }
                 }
             }
@@ -99,10 +114,27 @@ void PhysicsSystem::Update()
 
 
     //Triggers
-
     for (ColliderComponent* colliderA: colliders){
         if(colliderA->isSolid || !colliderA->isTrigger){
             continue;
+        }
+        bool state = getTriggerState(colliderA);
+        if (state == false && !colliderA->isTriggerd){
+
+            for(ColliderComponent* colliderB : colliders){
+                if(colliderA == colliderB) continue;
+                if(colliderA->owner == colliderB->owner) continue;
+                if(colliderB->isSolid) continue;
+                if(!colliderB->isTrigger) continue;
+
+                if (CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds()))
+				{
+					colliderA->OnTriggerEnter(colliderB);
+                    colliderA->isTriggerd = true;
+                    setTriggerState(colliderA, colliderA->isTriggerd);
+					// colliderB->OnTriggerEnter(colliderA);
+				}
+            }
         }
 
         for(ColliderComponent* colliderB : colliders){
@@ -110,11 +142,17 @@ void PhysicsSystem::Update()
             if(colliderA->owner == colliderB->owner) continue;
             if(colliderB->isSolid) continue;
             if(!colliderB->isTrigger) continue;
-
-            if(CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds())){
+            bool overlapping = CheckCollisionRecs(colliderA->GetBounds(), colliderB->GetBounds());
+            if(overlapping){
                 colliderA->OnTriggerStay(colliderB);
-                colliderB->OnTriggerStay(colliderA);
+                // colliderB->OnTriggerStay(colliderA);
             }
+            colliderA->isTriggerd = overlapping;
+        }
+
+        if (state == true && !colliderA->isTriggerd){
+            setTriggerState(colliderA, false);
+            colliderA->OnTriggerExit();
         }
     }   
 }

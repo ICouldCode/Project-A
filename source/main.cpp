@@ -7,8 +7,11 @@
 
 int main(void) {
 
-	int screenWidth = GetScreenWidth();
-	int screenHeight = GetScreenHeight();
+	// int screenWidth = GetScreenWidth();
+	// int screenHeight = GetScreenHeight();
+	
+	int screenWidth = 800;
+	int screenHeight = 600;
 
 	float deltaTime = 0.0f;
 
@@ -33,16 +36,16 @@ int main(void) {
 	ColliderComponent* interactCollider = new ColliderComponent();
 	interactCollider->isSolid = false;
 	interactCollider->isTrigger = true;
-	interactCollider->offset = {-player.width / 2, -player.height / 2};
+	interactCollider->offset = {player.width , -player.height / 2};
 	interactCollider->type = ColliderType::Interaction;
 	
-	interactCollider->scale = {2.0f, 2.0f};
+	interactCollider->scale = {1.5f, 2.0f};
 	player.AddComponent(interactCollider);
 	physicsSystem.addCollider(interactCollider);
 	
 	GameObject npc;
 	npc.color = GREEN;
-	npc.position = { 200, 200 };
+	npc.position = { 400, 400 };
 	npc.width = 128.0f;
 	npc.height = 128.0f;
 	ColliderComponent* npcCollider = new ColliderComponent();

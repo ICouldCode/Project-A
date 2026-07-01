@@ -24,10 +24,17 @@ public:
     bool isSolid = true;
     bool isTrigger = false;
 
+    bool isTriggerd = false;
+
 	bool isCollidingLeft = false;
 	bool isCollidingRight = false;
     bool isCollidingUp = false;
     bool isCollidingDown= false;
+    
+    
+    bool isColliding(){
+        return isCollidingUp || isCollidingLeft || isCollidingRight || isCollidingDown;
+    }
 
     void Draw(float deltaTime) override;
 
